@@ -1,29 +1,33 @@
-# fronzen_string_literal: true
+# frozen_string_literal: true
 
 require 'rails_helper'
 
 RSpec.describe 'payments requests', type: :request do
-  describe 'POST create payment' do
+  let(:client) { create(:client) }
+  let(:buyer) { create(:buyer) }
+
+  describe 'POST create' do
     context 'boleto payment' do
       context 'successfully' do
-        before do
-          post '/api/payments', params: { client: client, buyer: buyer, information: information }
+        let(:payment_json) do
+          { client: { id: '126' }, buyer: { name: 'Fulano',
+                                            email: 'email@email.com',
+                                            cpf: '111.222.333-44' },
+            payment: { amount: '1000.00', type: 'Boleto' } }
         end
 
         it 'should return status code 201 created' do
+          post '/api/payments', params: { payment: payment_json }
           expect(response.status).to eq 201
         end
       end
-    end
 
-    context 'credit card payment' do
-      context 'successfully' do
-        before do
-          post '/api/payments', params: { client: client, buyer: buyer, information: information, card: card }
-        end
-
-        it 'should return status code 201 created' do
-          expect(response.status).to eq 201
+      context 'without amount' do
+        it 'should return status code 412 precondition failed' do
+          post '/api/payments', params: {
+            payment: { client: client, buyer: buyer }
+          }
+          expect(response.status).to eq 412
         end
       end
     end
