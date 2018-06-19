@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    image: postgres:alpine
+    ports:
+      - 0:5432
+    env_file:
+      .env.docker
+  web:
+    build: .
+    volumes:
+      - .:/payment_api
+    ports:
+      - 3000:3000
+    command: rails s -b 0.0.0.0
+    env_file:
+      .env.docker
+    links:
+      - db
