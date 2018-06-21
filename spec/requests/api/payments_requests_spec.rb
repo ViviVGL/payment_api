@@ -10,10 +10,10 @@ RSpec.describe 'payments requests', type: :request do
     context 'boleto payment' do
       context 'successfully' do
         let(:payment_json) do
-          { client: { id: '126' }, buyer: { name: 'Fulano',
-                                            email: 'email@email.com',
-                                            cpf: '111.222.333-44' },
-            payment: { amount: '1000.00', type: 'Boleto' } }
+          { client: { id: client.id }, buyer: { name: buyer.name,
+                                                email: buyer.email,
+                                                cpf: buyer.cpf },
+            amount: '1000.00', payment_type: 'Boleto' }
         end
 
         it 'should return status code 201 created' do
@@ -23,10 +23,29 @@ RSpec.describe 'payments requests', type: :request do
       end
 
       context 'without amount' do
+        let(:payment_json) do
+          { client: { id: client.id }, buyer: { name: buyer.name,
+                                                email: buyer.email,
+                                                cpf: buyer.cpf },
+            payment_type: 'Boleto' }
+        end
+
         it 'should return status code 412 precondition failed' do
-          post '/api/payments', params: {
-            payment: { client: client, buyer: buyer }
-          }
+          post '/api/payments', params: { payment: payment_json }
+          expect(response.status).to eq 412
+        end
+      end
+
+      context 'without payment_type' do
+        let(:payment_json) do
+          { client: { id: client.id }, buyer: { name: buyer.name,
+                                                email: buyer.email,
+                                                cpf: buyer.cpf },
+            amount: '1000.00' }
+        end
+
+        it 'should return status code 412 precondition failed' do
+          post '/api/payments', params: { payment: payment_json }
           expect(response.status).to eq 412
         end
       end

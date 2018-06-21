@@ -14,6 +14,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
   gem 'capybara'
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.7'
   gem 'rubocop', '~> 0.57.2', require: false

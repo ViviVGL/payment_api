@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :payment do
     amount 1000.0
-    type 'Boleto'
+    payment_type 'Boleto'
     client
     buyer
   end

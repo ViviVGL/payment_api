@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2018_06_19_185328) do
 
   create_table "payments", force: :cascade do |t|
     t.float "amount"
-    t.string "type"
+    t.string "payment_type"
     t.bigint "client_id"
     t.bigint "buyer_id"
     t.index ["buyer_id"], name: "index_payments_on_buyer_id"
