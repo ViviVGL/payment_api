@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_19_185328) do
+ActiveRecord::Schema.define(version: 2018_06_26_212330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,13 @@ ActiveRecord::Schema.define(version: 2018_06_19_185328) do
     t.string "name"
     t.string "email"
     t.string "cpf"
+  end
+
+  create_table "cards", force: :cascade do |t|
+    t.string "holder_name"
+    t.string "card_number"
+    t.date "expiration_date"
+    t.string "cvv"
   end
 
   create_table "clients", force: :cascade do |t|
@@ -31,10 +38,13 @@ ActiveRecord::Schema.define(version: 2018_06_19_185328) do
     t.string "payment_type"
     t.bigint "client_id"
     t.bigint "buyer_id"
+    t.bigint "card_id"
     t.index ["buyer_id"], name: "index_payments_on_buyer_id"
+    t.index ["card_id"], name: "index_payments_on_card_id"
     t.index ["client_id"], name: "index_payments_on_client_id"
   end
 
   add_foreign_key "payments", "buyers"
+  add_foreign_key "payments", "cards"
   add_foreign_key "payments", "clients"
 end

@@ -50,5 +50,23 @@ RSpec.describe 'payments requests', type: :request do
         end
       end
     end
+
+    context 'credit card payment' do
+      context 'successfully' do
+        let(:payment_json) do
+          { client: { id: client.id }, buyer: { name: buyer.name,
+                                                email: buyer.email,
+                                                cpf: buyer.cpf },
+            card: { holder_name: 'Dono do cartão', card_number: '11112222',
+                    expiration_date: 5.years.from_now.to_date, cvv: '444' },
+            amount: '1000.00', payment_type: 'Credit Card' }
+        end
+
+        it 'should return status code 201 created' do
+          post '/api/payments', params: { payment: payment_json }
+          expect(response.status).to eq 201
+        end
+      end
+    end
   end
 end
