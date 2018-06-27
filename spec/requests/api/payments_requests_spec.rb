@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'payments requests', type: :request do
   let(:client) { create(:client) }
   let(:buyer) { create(:buyer) }
+  let(:card) { create(:card) }
 
   describe 'POST create' do
     context 'boleto payment' do
@@ -57,8 +58,9 @@ RSpec.describe 'payments requests', type: :request do
           { client: { id: client.id }, buyer: { name: buyer.name,
                                                 email: buyer.email,
                                                 cpf: buyer.cpf },
-            card: { holder_name: 'Dono do cartão', card_number: '11112222',
-                    expiration_date: 5.years.from_now.to_date, cvv: '444' },
+            card: { holder_name: card.holder_name,
+                    card_number: card.card_number,
+                    expiration_date: card.expiration_date, cvv: card.cvv },
             amount: '1000.00', payment_type: 'Credit Card' }
         end
 
